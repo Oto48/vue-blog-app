@@ -1,16 +1,18 @@
 <template>
-  <add-blog msg="Welcome to Your Vue.js App" />
+  <blog-list />
 </template>
 
 <script>
-import AddBlog from "./views/AddBlog.vue";
+import BlogList from "./views/BlogList/BlogList.vue";
 
 export default {
   name: "App",
   components: {
-    AddBlog,
+    BlogList,
   },
 };
 </script>
 
-<style></style>
+<style lang="scss">
+@import "./assets/css/style.scss";
+</style>

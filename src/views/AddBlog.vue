@@ -80,7 +80,6 @@ export default {
   },
 
   mounted() {
-    console.log("ok");
     axios
       .get("https://api.blog.redberryinternship.ge/api/blogs", {
         headers: {
