@@ -20,7 +20,7 @@
   </header>
   <div class="BlogList">
     <div
-      v-for="(item, index) in blogs"
+      v-for="(item, index) in filteredBlogs || blogs"
       :key="index"
       class="BlogList_card text-medium"
     >
@@ -57,6 +57,7 @@ export default {
   data() {
     return {
       blogs: [],
+      filteredBlogs: null,
       categories: [],
       BlogImg: BlogImg,
     };
@@ -64,7 +65,9 @@ export default {
 
   methods: {
     filter(id) {
-      console.log(id);
+      this.filteredBlogs = this.blogs.filter((blog) =>
+        blog.categories.some((category) => category.id === id)
+      );
     },
   },
 

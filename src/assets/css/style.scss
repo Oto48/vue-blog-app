@@ -6,6 +6,23 @@ body {
   padding: 0;
 }
 
+nav {
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 76px;
+
+  button {
+    cursor: pointer;
+    border-radius: 8px;
+    background: #5d37f3;
+    padding: 10px 20px;
+    color: #fff;
+    border: none;
+  }
+}
+
 .text {
   &-small {
     font-size: 12px;
