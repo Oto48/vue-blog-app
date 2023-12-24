@@ -1,0 +1,59 @@
+form {
+  width: 600px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .file {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+
+    span {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  .drag-over {
+    border-color: #2196f3;
+    background-color: red;
+  }
+
+  input {
+    height: 44px;
+    border-radius: 12px;
+    outline: none;
+    border: 1px solid;
+    border-color: #e4e3eb;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  input:focus {
+    border: 1.5px solid #5d37f3;
+    background: #f7f7ff;
+  }
+
+  label {
+    font-weight: 500;
+  }
+
+  .input_container {
+    display: flex;
+    gap: 40px;
+
+    > div {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
