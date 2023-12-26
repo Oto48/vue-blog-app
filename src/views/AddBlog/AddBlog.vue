@@ -1,6 +1,6 @@
 <template>
   <h1>ბლოგის დამატება</h1>
-  <form @submit.prevent="send">
+  <form @submit.prevent="submitForm">
     <div
       @dragover.prevent="dragging = true"
       @dragenter.prevent="dragging = true"
@@ -97,18 +97,42 @@
         </p>
       </div>
       <div>
-        <label for="categories">კატეგორია *</label>
-
-        <select name="categories" v-model="formData.categories">
-          <option value="" disabled>აირჩიეთ კატეგორია</option>
-          <option
-            v-for="category in categories"
-            :key="category.id"
-            :value="category.id"
-          >
-            {{ category.title }}
-          </option>
-        </select>
+        <div class="custom-multi-select">
+          <label for="categories">კატეგორია *</label>
+          <div class="select-container" @click="toggleDropdown">
+            <div v-if="selectedCategories.length === 0" class="placeholder">
+              <p>აირჩიეთ კატეგორია</p>
+              <p class="arrow"></p>
+            </div>
+            <div v-else class="selected-items">
+              <div class="selected-items-container">
+                <div
+                  v-for="category in selectedCategories"
+                  :key="category"
+                  class="selected-item"
+                >
+                  {{ category.title }}
+                  <span
+                    @click.stop="removeCategory(category)"
+                    class="remove-icon"
+                    >x</span
+                  >
+                </div>
+              </div>
+              <p class="arrow"></p>
+            </div>
+            <div v-if="dropdownOpen" class="dropdown">
+              <div
+                v-for="category in categories"
+                :key="category.id"
+                @click="toggleCategory(category)"
+                :style="{ background: category.background_color }"
+              >
+                {{ category.title }}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div>
@@ -138,11 +162,13 @@ export default {
         image: null,
         description: "",
         publish_date: "",
-        categories: "[1,2,3,4,5]",
+        categories: [],
         email: "gigagiorgadze@redberry.ge",
       },
 
       categories: [],
+      selectedCategories: [],
+      dropdownOpen: false,
 
       authorValidation: [
         { text: "მინიმუმ 4 სიმბოლო" },
@@ -162,12 +188,18 @@ export default {
   },
 
   methods: {
-    send() {
+    submitForm() {
       const formData = new FormData();
+
+      this.formData.categories = JSON.stringify(
+        this.selectedCategories.map((item) => item.id).sort()
+      );
 
       Object.keys(this.formData).forEach((key) => {
         formData.append(key, this.formData[key]);
       });
+
+      console.log("!!!!!!!!", this.formData);
 
       axios
         .post("https://api.blog.redberryinternship.ge/api/blogs", formData, {
@@ -191,8 +223,7 @@ export default {
       this.handleFileChange(files);
     },
     handleFileChange(event) {
-      console.log(event);
-      this.formData.image = event;
+      this.formData.image = event.target?.files[0] || event;
     },
 
     validateAuthor() {
@@ -251,6 +282,27 @@ export default {
       if (!this.isDateFocused) {
         this.dateError = !this.formData.publish_date;
       }
+    },
+
+    toggleDropdown() {
+      this.dropdownOpen = !this.dropdownOpen;
+    },
+    toggleCategory(category) {
+      this.categories = this.categories.filter(
+        (item) => item.id !== category.id
+      );
+      if (this.selectedCategories.includes(category)) {
+        this.removeCategory(category.id);
+      } else {
+        this.selectedCategories.push(category);
+      }
+    },
+    removeCategory(category) {
+      this.selectedCategories = this.selectedCategories.filter(
+        (item) => item.id !== category.id
+      );
+      this.categories.push(category);
+      this.categories.sort((a, b) => a.id - b.id);
     },
   },
 
