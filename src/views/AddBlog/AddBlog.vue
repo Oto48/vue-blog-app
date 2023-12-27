@@ -139,7 +139,7 @@
       <label for="email">ელ-ფოსტა</label>
       <input type="text" name="email" v-model="formData.email" />
     </div>
-    <button type="submit">submit</button>
+    <button type="submit" :disabled="hasErrors">submit</button>
   </form>
 </template>
 
@@ -180,10 +180,10 @@ export default {
       dateValidation: [{ text: "გთხოვთ აირჩიოთ თარიღი" }],
 
       dragging: false,
-      authorError: false,
-      titleError: false,
-      descriptionError: false,
-      dateError: false,
+      authorError: null,
+      titleError: null,
+      descriptionError: null,
+      dateError: null,
     };
   },
 
@@ -228,17 +228,23 @@ export default {
 
     validateAuthor() {
       const author = this.formData.author.trim();
-
       const words = author.split(/\s+/);
       const nonSpaceAuthor = author.replace(/\s+/g, "");
       const georgianCharsRegex = /^[ა-ჰ\s]+$/;
 
-      this.authorValidation[0].color =
-        nonSpaceAuthor.length >= 4 ? "green" : "red";
-      this.authorValidation[1].color = words.length >= 2 ? "green" : "red";
-      this.authorValidation[2].color = georgianCharsRegex.test(author)
-        ? "green"
-        : "red";
+      const isLengthValid = nonSpaceAuthor.length >= 4;
+      const isWordCountValid = words.length >= 2;
+      const isGeorgianCharsValid = georgianCharsRegex.test(author);
+
+      this.authorValidation[0].color = isLengthValid ? "green" : "red";
+      this.authorValidation[1].color = isWordCountValid ? "green" : "red";
+      this.authorValidation[2].color = isGeorgianCharsValid ? "green" : "red";
+
+      this.authorError = !(
+        isLengthValid &&
+        isWordCountValid &&
+        isGeorgianCharsValid
+      );
     },
 
     updateAuthorBorder() {
@@ -252,22 +258,31 @@ export default {
 
     validateTitle() {
       const title = this.formData.title.trim();
-      this.titleValidation[0].color = title.length >= 2 ? "green" : "red";
+      const isTitleValid = title.length >= 2;
+
+      this.titleValidation[0].color = isTitleValid ? "green" : "red";
+      this.titleError = !isTitleValid;
     },
 
     updateTitleBorder() {
-      this.titleError = this.formData.title.trim().length < 2;
+      const isTitleValid = this.formData.title.trim().length >= 2;
+      this.titleError = !isTitleValid;
       this.validateTitle();
     },
 
     validateDescription() {
       const description = this.formData.description.trim();
-      this.descriptionValidation[0].color =
-        description.length >= 2 ? "green" : "red";
+      const isDescriptionValid = description.length >= 2;
+
+      this.descriptionValidation[0].color = isDescriptionValid
+        ? "green"
+        : "red";
+      this.descriptionError = !isDescriptionValid;
     },
 
     updateDescriptionBorder() {
-      this.descriptionError = this.formData.description.trim().length < 2;
+      const isDescriptionValid = this.formData.description.trim().length >= 2;
+      this.descriptionError = !isDescriptionValid;
       this.validateDescription();
     },
 
@@ -279,9 +294,7 @@ export default {
     },
 
     updateDateBorder() {
-      if (!this.isDateFocused) {
-        this.dateError = !this.formData.publish_date;
-      }
+      this.dateError = !this.formData.publish_date;
     },
 
     toggleDropdown() {
@@ -303,6 +316,25 @@ export default {
       );
       this.categories.push(category);
       this.categories.sort((a, b) => a.id - b.id);
+    },
+  },
+
+  computed: {
+    hasErrors() {
+      // console.log(this.selectedCategories);
+      // console.log("image", this.formData.image)
+      return (
+        this.titleError ||
+        this.titleError === null ||
+        this.authorError ||
+        this.authorError === null ||
+        this.descriptionError ||
+        this.descriptionError === null ||
+        this.dateError ||
+        this.dateError === null ||
+        !this.selectedCategories.length ||
+        !this.formData.image
+      );
     },
   },
 
