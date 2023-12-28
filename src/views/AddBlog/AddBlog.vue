@@ -1,13 +1,13 @@
 <template>
-  <h1>ბლოგის დამატება</h1>
   <form @submit.prevent="submitForm">
+    <h1>ბლოგის დამატება</h1>
     <div
       @dragover.prevent="dragging = true"
       @dragenter.prevent="dragging = true"
       @dragleave="dragging = false"
       @drop.prevent="handleDrop"
       class="file"
-      :class="{ 'drag-over': dragging }"
+      :class="{ file_drag_over: dragging }"
     >
       <FileSvg />
       <p>
@@ -30,15 +30,17 @@
           v-model="formData.author"
           @input="validateAuthor"
           @blur="updateAuthorBorder"
-          :class="authorError ? 'error' : ''"
+          :class="authorError ? 'error' : authorError !== null ? 'valid' : ''"
         />
-        <p
-          v-for="validation in authorValidation"
-          :key="validation.text"
-          :style="{ color: validation.color }"
-        >
-          {{ validation.text }}
-        </p>
+        <ul>
+          <li
+            v-for="validation in authorValidation"
+            :key="validation.text"
+            :style="{ color: validation.color }"
+          >
+            {{ validation.text }}
+          </li>
+        </ul>
       </div>
       <div>
         <label for="title">სათაური *</label>
@@ -48,34 +50,45 @@
           v-model="formData.title"
           @input="validateTitle"
           @blur="updateTitleBorder"
-          :class="titleError ? 'error' : ''"
+          :class="titleError ? 'error' : titleError !== null ? 'valid' : ''"
         />
-        <p
-          v-for="validation in titleValidation"
-          :key="validation.text"
-          :style="{ color: validation.color }"
-        >
-          {{ validation.text }}
-        </p>
+        <ul>
+          <li
+            v-for="validation in titleValidation"
+            :key="validation.text"
+            :style="{ color: validation.color }"
+          >
+            {{ validation.text }}
+          </li>
+        </ul>
       </div>
     </div>
-    <div>
-      <label for="description">აღწერა *</label>
-      <input
-        type="text"
-        name="description"
-        v-model="formData.description"
-        @input="validateDescription"
-        @blur="updateDescriptionBorder"
-        :class="descriptionError ? 'error' : ''"
-      />
-      <p
-        v-for="validation in descriptionValidation"
-        :key="validation.text"
-        :style="{ color: validation.color }"
-      >
-        {{ validation.text }}
-      </p>
+    <div class="input_container">
+      <div>
+        <label for="description">აღწერა *</label>
+        <textarea
+          name="description"
+          v-model="formData.description"
+          @input="validateDescription"
+          @blur="updateDescriptionBorder"
+          :class="
+            descriptionError
+              ? 'error'
+              : descriptionError !== null
+              ? 'valid'
+              : ''
+          "
+        ></textarea>
+        <ul>
+          <li
+            v-for="validation in descriptionValidation"
+            :key="validation.text"
+            :style="{ color: validation.color }"
+          >
+            {{ validation.text }}
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="input_container">
       <div>
@@ -86,30 +99,27 @@
           v-model="formData.publish_date"
           @input="validateDate"
           @blur="updateDateBorder"
-          :class="dateError ? 'error' : ''"
+          :class="dateError ? 'error' : dateError !== null ? 'valid' : ''"
         />
-        <p
-          v-for="validation in dateValidation"
-          :key="validation.text"
-          :style="{ color: validation.color }"
-        >
-          {{ validation.text }}
-        </p>
       </div>
-      <div>
-        <div class="custom-multi-select">
+      <div class="input_container">
+        <div class="multi_select" ref="multiSelectRef">
           <label for="categories">კატეგორია *</label>
-          <div class="select-container" @click="toggleDropdown">
+          <div class="multi_select_container" @click="toggleDropdown">
             <div v-if="selectedCategories.length === 0" class="placeholder">
               <p>აირჩიეთ კატეგორია</p>
               <p class="arrow"></p>
             </div>
-            <div v-else class="selected-items">
-              <div class="selected-items-container">
+            <div v-else class="selected_items">
+              <div class="selected_items_container">
                 <div
                   v-for="category in selectedCategories"
                   :key="category"
                   class="selected-item"
+                  :style="{
+                    background: category.background_color,
+                    color: category.text_color,
+                  }"
                 >
                   {{ category.title }}
                   <span
@@ -126,7 +136,10 @@
                 v-for="category in categories"
                 :key="category.id"
                 @click="toggleCategory(category)"
-                :style="{ background: category.background_color }"
+                :style="{
+                  background: category.background_color,
+                  color: category.text_color,
+                }"
               >
                 {{ category.title }}
               </div>
@@ -135,11 +148,18 @@
         </div>
       </div>
     </div>
-    <div>
-      <label for="email">ელ-ფოსტა</label>
-      <input type="text" name="email" v-model="formData.email" />
+    <div class="input_container">
+      <div>
+        <label for="email">ელ-ფოსტა</label>
+        <input type="text" name="email" v-model="formData.email" />
+      </div>
     </div>
-    <button type="submit" :disabled="hasErrors">submit</button>
+    <div class="input_container">
+      <div></div>
+      <div>
+        <button type="submit" :disabled="hasErrors" class="btn">submit</button>
+      </div>
+    </div>
   </form>
 </template>
 
@@ -236,9 +256,11 @@ export default {
       const isWordCountValid = words.length >= 2;
       const isGeorgianCharsValid = georgianCharsRegex.test(author);
 
-      this.authorValidation[0].color = isLengthValid ? "green" : "red";
-      this.authorValidation[1].color = isWordCountValid ? "green" : "red";
-      this.authorValidation[2].color = isGeorgianCharsValid ? "green" : "red";
+      this.authorValidation[0].color = isLengthValid ? "#14D81C" : "#ea1919";
+      this.authorValidation[1].color = isWordCountValid ? "#14D81C" : "#ea1919";
+      this.authorValidation[2].color = isGeorgianCharsValid
+        ? "#14D81C"
+        : "#ea1919";
 
       this.authorError = !(
         isLengthValid &&
@@ -260,7 +282,7 @@ export default {
       const title = this.formData.title.trim();
       const isTitleValid = title.length >= 2;
 
-      this.titleValidation[0].color = isTitleValid ? "green" : "red";
+      this.titleValidation[0].color = isTitleValid ? "#14D81C" : "#ea1919";
       this.titleError = !isTitleValid;
     },
 
@@ -275,8 +297,8 @@ export default {
       const isDescriptionValid = description.length >= 2;
 
       this.descriptionValidation[0].color = isDescriptionValid
-        ? "green"
-        : "red";
+        ? "#14D81C"
+        : "#ea1919";
       this.descriptionError = !isDescriptionValid;
     },
 
@@ -289,7 +311,7 @@ export default {
     validateDate() {
       const date = this.formData.publish_date;
 
-      this.dateValidation[0].color = date ? "green" : "red";
+      this.dateValidation[0].color = date ? "#14D81C" : "#ea1919";
       this.dateError = !date;
     },
 
@@ -299,6 +321,12 @@ export default {
 
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
+    },
+    closeDropdown(event) {
+      const isMultiSelect = this.$refs.multiSelectRef?.contains(event.target);
+      if (!isMultiSelect) {
+        this.dropdownOpen = false;
+      }
     },
     toggleCategory(category) {
       this.categories = this.categories.filter(
@@ -352,6 +380,8 @@ export default {
         this.categories = items.data;
         console.log(this.categories);
       });
+
+    document.body.addEventListener("click", this.closeDropdown);
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav class="p-1">
     <router-link to="/"><img :src="NavImg" alt="" /></router-link>
     <router-link to="/add"><button>დაამატე ბლოგი</button></router-link>
   </nav>

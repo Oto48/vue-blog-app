@@ -11,7 +11,6 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 76px;
 
   button {
     cursor: pointer;
@@ -42,5 +41,23 @@ nav {
 
   &-bold {
     font-weight: 500;
+  }
+}
+
+.p-1 {
+  padding: 0 76px;
+}
+
+button {
+  cursor: pointer;
+  border-radius: 8px;
+  background: #5d37f3;
+  padding: 10px 20px;
+  color: #fff;
+  border: none;
+
+  &:disabled {
+    cursor: auto;
+    background-color: #e4e3eb;
   }
 }
