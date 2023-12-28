@@ -2,7 +2,7 @@
   <div class="modal" v-if="$store.state.openModal">
     <div ref="modalRef">
       <div>
-        <span @click="closeModal"></span>
+        <ExitSVG @click="closeModal" />
       </div>
       <approved-svg />
       <p>{{ text }}</p>
@@ -13,6 +13,7 @@
 
 <script>
 import ApprovedSvg from "@/assets/svg/ApprovedSvg.vue";
+import ExitSVG from "@/assets/svg/ExitSvg";
 
 export default {
   name: "BlodModal",
@@ -24,6 +25,7 @@ export default {
 
   components: {
     ApprovedSvg: ApprovedSvg,
+    ExitSVG: ExitSVG,
   },
 
   methods: {

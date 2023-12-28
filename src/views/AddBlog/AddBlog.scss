@@ -19,6 +19,30 @@ form {
     border-radius: 12px;
     background-color: rgba(#5d37f3, 0.1);
 
+    &_output {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 12px;
+      background: #f2f2fa;
+      padding: 18px 16px;
+
+      div {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+    }
+
     span {
       text-decoration: underline;
       cursor: pointer;

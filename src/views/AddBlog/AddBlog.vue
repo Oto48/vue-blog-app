@@ -2,6 +2,7 @@
   <form @submit.prevent="submitForm">
     <h1>ბლოგის დამატება</h1>
     <div
+      v-if="!formData.image"
       @dragover.prevent="dragging = true"
       @dragenter.prevent="dragging = true"
       @dragleave="dragging = false"
@@ -20,6 +21,13 @@
         style="display: none"
         @change="handleFileChange"
       />
+    </div>
+    <div v-if="formData.image" class="file_output">
+      <div>
+        <img :src="GalleryImg" alt="GalleryImg" />
+        <p>{{ formData.image.name }}</p>
+      </div>
+      <ExitSVG @click="removeImage" />
     </div>
     <div class="input_container">
       <div>
@@ -170,6 +178,8 @@
 <script>
 import axios from "axios";
 import FileSvg from "@/assets/svg/FolderSvg";
+import ExitSVG from "@/assets/svg/ExitSvg";
+import GalleryImg from "@/assets/images/GalleryImg.png";
 import BlogModal from "@/components/BlogModal/BlogModal.vue";
 
 export default {
@@ -177,6 +187,7 @@ export default {
 
   components: {
     FileSvg: FileSvg,
+    ExitSVG: ExitSVG,
     BlogModal: BlogModal,
   },
 
@@ -185,7 +196,7 @@ export default {
       formData: {
         author: "",
         title: "",
-        image: null,
+        image: "",
         description: "",
         publish_date: "",
         categories: [],
@@ -195,6 +206,7 @@ export default {
       categories: [],
       selectedCategories: [],
       dropdownOpen: false,
+      GalleryImg: GalleryImg,
 
       authorValidation: [
         { text: "მინიმუმ 4 სიმბოლო" },
@@ -250,6 +262,9 @@ export default {
     },
     handleFileChange(event) {
       this.formData.image = event.target?.files[0] || event;
+    },
+    removeImage() {
+      this.formData.image = "";
     },
 
     validateAuthor() {
@@ -362,15 +377,15 @@ export default {
       // console.log(this.selectedCategories);
       // console.log("image", this.formData.image)
       return (
-        this.titleError ||
-        this.titleError === null ||
-        this.authorError ||
-        this.authorError === null ||
-        this.descriptionError ||
-        this.descriptionError === null ||
-        this.dateError ||
-        this.dateError === null ||
-        !this.selectedCategories.length ||
+        // this.titleError ||
+        // this.titleError === null ||
+        // this.authorError ||
+        // this.authorError === null ||
+        // this.descriptionError ||
+        // this.descriptionError === null ||
+        // this.dateError ||
+        // this.dateError === null ||
+        // !this.selectedCategories.length ||
         !this.formData.image
       );
     },
