@@ -49,7 +49,7 @@
 
 <script>
 import axios from "axios";
-import BlogImg from "../../assets/Blog.png";
+import BlogImg from "../../assets/images/Blog.png";
 
 export default {
   name: "BlogList",

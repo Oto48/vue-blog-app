@@ -161,17 +161,23 @@
       </div>
     </div>
   </form>
+  <blog-modal
+    text="ჩანაწი წარმატებით დაემატა"
+    buttonText="თავარ გვერდზე დაბრუნება"
+  />
 </template>
 
 <script>
 import axios from "axios";
-import FileSvg from "../../assets/svg/FolderSvg";
+import FileSvg from "@/assets/svg/FolderSvg";
+import BlogModal from "@/components/BlogModal/BlogModal.vue";
 
 export default {
   name: "AddBlog",
 
   components: {
     FileSvg: FileSvg,
+    BlogModal: BlogModal,
   },
 
   data() {
@@ -344,6 +350,10 @@ export default {
       );
       this.categories.push(category);
       this.categories.sort((a, b) => a.id - b.id);
+    },
+
+    updateModal() {
+      this.$store.commit("updateModal", true);
     },
   },
 

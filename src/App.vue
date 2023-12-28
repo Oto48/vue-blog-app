@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import NavImg from "./assets/NavImg.png";
+import NavImg from "./assets/images/NavImg.png";
 
 export default {
   name: "App",
