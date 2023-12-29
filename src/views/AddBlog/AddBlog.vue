@@ -19,7 +19,7 @@
         ref="fileInput"
         type="file"
         style="display: none"
-        @change="handleFileChange"
+        @change="uploadFile"
       />
     </div>
     <div v-if="formData.image" class="file_output">
@@ -159,8 +159,28 @@
     <div class="input_container">
       <div>
         <label for="email">ელ-ფოსტა</label>
-        <input type="text" name="email" v-model="formData.email" />
+        <input
+          type="text"
+          name="email"
+          v-model="formData.email"
+          @input="validateEmail"
+          @blur="updateEmailBorder"
+          :class="
+            emailError
+              ? 'error'
+              : emailError !== null && formData.email
+              ? 'valid'
+              : ''
+          "
+        />
+        <div class="alert" v-if="emailError">
+          <AlertSvg />
+          <p :style="{ color: emailValidation.color }">
+            {{ emailValidation.text }}
+          </p>
+        </div>
       </div>
+      <div></div>
     </div>
     <div class="input_container">
       <div></div>
@@ -171,7 +191,7 @@
   </form>
   <blog-modal
     text="ჩანაწი წარმატებით დაემატა"
-    buttonText="თავარ გვერდზე დაბრუნება"
+    buttonText="მთავარ გვერდზე დაბრუნება"
   />
 </template>
 
@@ -179,6 +199,7 @@
 import axios from "axios";
 import FileSvg from "@/assets/svg/FolderSvg";
 import ExitSVG from "@/assets/svg/ExitSvg";
+import AlertSvg from "@/assets/svg/AlertSvg";
 import GalleryImg from "@/assets/images/GalleryImg.png";
 import BlogModal from "@/components/BlogModal/BlogModal.vue";
 
@@ -188,6 +209,7 @@ export default {
   components: {
     FileSvg: FileSvg,
     ExitSVG: ExitSVG,
+    AlertSvg: AlertSvg,
     BlogModal: BlogModal,
   },
 
@@ -200,7 +222,7 @@ export default {
         description: "",
         publish_date: "",
         categories: [],
-        email: "gigagiorgadze@redberry.ge",
+        email: "",
       },
 
       categories: [],
@@ -216,12 +238,14 @@ export default {
       titleValidation: [{ text: "მინიმუმ 2 სიმბოლო" }],
       descriptionValidation: [{ text: "მინიმუმ 2 სიმბოლო" }],
       dateValidation: [{ text: "გთხოვთ აირჩიოთ თარიღი" }],
+      emailValidation: { text: "მეილი უნდა მთავრდებოდეს @redberry.ge-ით" },
 
       dragging: false,
       authorError: null,
       titleError: null,
       descriptionError: null,
       dateError: null,
+      emailError: null,
     };
   },
 
@@ -233,22 +257,25 @@ export default {
         this.selectedCategories.map((item) => item.id).sort()
       );
 
+      this.formData.image = this.convertUrlToBlob(this.formData.image.url);
+
       Object.keys(this.formData).forEach((key) => {
         formData.append(key, this.formData[key]);
       });
-
-      console.log("!!!!!!!!", this.formData);
 
       axios
         .post("https://api.blog.redberryinternship.ge/api/blogs", formData, {
           headers: {
             Accept: "application/json",
             Authorization:
-              "Bearer e9ec8ffb6a7df90c3eba1e6c906ca9c00df7e20b097aa217078d50421ec75daa",
+              "Bearer 4fb36d478dd2c9832443d9cd1fe3f43236ab40fab7f1f7bc63e16635dc065151",
           },
         })
         .then((response) => {
           console.log(response.data);
+          this.resetForm();
+          this.$store.commit("updateModal", true);
+          localStorage.removeItem("formData");
         });
     },
 
@@ -258,11 +285,44 @@ export default {
     handleDrop(event) {
       this.dragging = false;
       const files = event.dataTransfer.files[0];
-      this.handleFileChange(files);
+      this.uploadFile(files);
     },
-    handleFileChange(event) {
-      this.formData.image = event.target?.files[0] || event;
+
+    uploadFile(event) {
+      const file = event.target?.files[0] || event;
+      const imageName = file.name;
+
+      if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          const result = reader.result;
+
+          if (result) {
+            this.formData.image = result;
+            localStorage.setItem("formData", JSON.stringify(this.formData));
+            this.formData.image = { name: imageName, url: result };
+          }
+        };
+
+        reader.readAsDataURL(file);
+      }
     },
+
+    convertUrlToBlob(dataURL) {
+      const arr = dataURL.split(",");
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      return new Blob([u8arr], { type: mime });
+    },
+
     removeImage() {
       this.formData.image = "";
     },
@@ -340,6 +400,20 @@ export default {
       this.dateError = !this.formData.publish_date;
     },
 
+    validateEmail() {
+      const email = this.formData.email.trim();
+      const isEmailValid = !email || email.endsWith("@redberry.ge");
+
+      this.emailValidation.color = isEmailValid ? "#14D81C" : "#ea1919";
+      this.emailError = !isEmailValid;
+    },
+
+    updateEmailBorder() {
+      const email = this.formData.email.trim();
+      this.emailError = email && !email.endsWith("@redberry.ge");
+      this.validateEmail();
+    },
+
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
     },
@@ -367,6 +441,26 @@ export default {
       this.categories.sort((a, b) => a.id - b.id);
     },
 
+    resetForm() {
+      this.formData = {
+        author: "",
+        title: "",
+        image: "",
+        description: "",
+        publish_date: "",
+        categories: [],
+        email: "",
+      };
+      this.selectedCategories = [];
+      this.dropdownOpen = false;
+
+      this.authorError = null;
+      this.titleError = null;
+      this.descriptionError = null;
+      this.dateError = null;
+      this.emailError = null;
+    },
+
     updateModal() {
       this.$store.commit("updateModal", true);
     },
@@ -374,30 +468,35 @@ export default {
 
   computed: {
     hasErrors() {
-      // console.log(this.selectedCategories);
-      // console.log("image", this.formData.image)
       return (
-        // this.titleError ||
-        // this.titleError === null ||
-        // this.authorError ||
-        // this.authorError === null ||
-        // this.descriptionError ||
-        // this.descriptionError === null ||
-        // this.dateError ||
-        // this.dateError === null ||
-        // !this.selectedCategories.length ||
+        this.titleError ||
+        this.titleError === null ||
+        this.authorError ||
+        this.authorError === null ||
+        this.descriptionError ||
+        this.descriptionError === null ||
+        this.dateError ||
+        this.dateError === null ||
+        this.emailError ||
+        !this.selectedCategories.length ||
         !this.formData.image
       );
     },
   },
 
   mounted() {
+    const storedData = localStorage.getItem("formData");
+
+    if (storedData) {
+      this.formData = JSON.parse(storedData);
+    }
+
     axios
       .get("https://api.blog.redberryinternship.ge/api/categories", {
         headers: {
           Accept: "application/json",
           Authorization:
-            "Bearer e9ec8ffb6a7df90c3eba1e6c906ca9c00df7e20b097aa217078d50421ec75daa",
+            "Bearer 4fb36d478dd2c9832443d9cd1fe3f43236ab40fab7f1f7bc63e16635dc065151",
         },
       })
       .then((response) => {
@@ -407,6 +506,19 @@ export default {
       });
 
     document.body.addEventListener("click", this.closeDropdown);
+  },
+
+  watch: {
+    formData: {
+      handler(newValue) {
+        localStorage.setItem("formData", JSON.stringify(newValue));
+      },
+      deep: true,
+    },
+  },
+
+  beforeUnmount() {
+    localStorage.removeItem("formData");
   },
 };
 </script>

@@ -77,7 +77,7 @@ export default {
         headers: {
           Accept: "application/json",
           Authorization:
-            "Bearer e9ec8ffb6a7df90c3eba1e6c906ca9c00df7e20b097aa217078d50421ec75daa",
+            "Bearer 4fb36d478dd2c9832443d9cd1fe3f43236ab40fab7f1f7bc63e16635dc065151",
         },
       })
       .then((response) => {
@@ -91,7 +91,7 @@ export default {
         headers: {
           Accept: "application/json",
           Authorization:
-            "Bearer e9ec8ffb6a7df90c3eba1e6c906ca9c00df7e20b097aa217078d50421ec75daa",
+            "Bearer 4fb36d478dd2c9832443d9cd1fe3f43236ab40fab7f1f7bc63e16635dc065151",
         },
       })
       .then((response) => {
