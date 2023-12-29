@@ -116,7 +116,7 @@
           <div class="multi_select_container" @click="toggleDropdown">
             <div v-if="selectedCategories.length === 0" class="placeholder">
               <p>აირჩიეთ კატეგორია</p>
-              <p class="arrow"></p>
+              <div><p class="arrow"></p></div>
             </div>
             <div v-else class="selected_items">
               <div class="selected_items_container">
