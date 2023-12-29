@@ -79,12 +79,22 @@ export default {
     filter(category) {
       if (!category.selected) {
         category.selected = true;
-        const id = category.id;
-        this.filteredBlogs = this.blogs.filter((blog) =>
-          blog.categories.some((category) => category.id === id)
-        );
       } else {
         category.selected = false;
+      }
+
+      const selectedCategoryIds = this.categories
+        .filter((cat) => cat.selected)
+        .map((cat) => cat.id);
+
+      if (selectedCategoryIds.length > 0) {
+        this.filteredBlogs = this.blogs.filter((blog) =>
+          blog.categories.some((category) =>
+            selectedCategoryIds.includes(category.id)
+          )
+        );
+      } else {
+        this.filteredBlogs = null;
       }
     },
 
