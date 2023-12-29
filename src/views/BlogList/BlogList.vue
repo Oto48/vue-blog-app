@@ -48,14 +48,12 @@
         <router-link :to="'/' + item.id">სრულად ნახვა</router-link>
       </div>
     </div>
-    <login-modal></login-modal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import BlogImg from "@/assets/images/Blog.png";
-import LoginModal from "@/components/LoginModal/LoginModal.vue";
 
 export default {
   name: "BlogList",
@@ -67,10 +65,6 @@ export default {
       categories: [],
       BlogImg: BlogImg,
     };
-  },
-
-  components: {
-    LoginModal: LoginModal,
   },
 
   methods: {
