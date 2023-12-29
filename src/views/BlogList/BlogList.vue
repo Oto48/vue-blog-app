@@ -1,55 +1,59 @@
 <template>
-  <header>
-    <div>
-      <h1 class="text-xl">ბლოგი</h1>
-      <img :src="BlogImg" alt="BlogImg" />
-    </div>
-    <div>
-      <p
-        v-for="(category, index) in categories"
-        :key="index"
-        :style="{
-          color: category.text_color,
-          backgroundColor: category.background_color,
-        }"
-        @click="filter(category.id)"
-      >
-        {{ category.title }}
-      </p>
-    </div>
-  </header>
-  <div class="BlogList">
-    <div
-      v-for="(item, index) in filteredBlogs || blogs"
-      :key="index"
-      class="BlogList_card text-medium"
-    >
-      <img :src="item.image" />
-      <p class="text-bold">{{ item.author }}</p>
-      <p class="BlogList_card_date text-small">{{ item.publish_date }}</p>
-      <p class="text-large text-bold">{{ item.title }}</p>
-      <div class="BlogList_card_categories">
+  <div class="container p-1">
+    <header>
+      <div>
+        <h1 class="text-xl">ბლოგი</h1>
+        <img :src="BlogImg" alt="BlogImg" />
+      </div>
+      <div>
         <p
-          v-for="(category, index) in item.categories"
+          v-for="(category, index) in categories"
           :key="index"
           :style="{
             color: category.text_color,
             backgroundColor: category.background_color,
           }"
-          class="text-small text-bold"
+          @click="filter(category.id)"
         >
           {{ category.title }}
         </p>
       </div>
-      <p class="BlogList_card_description">{{ item.description }}</p>
-      <p>სრულად ნახვა</p>
+    </header>
+    <div class="BlogList">
+      <div
+        v-for="(item, index) in filteredBlogs || blogs"
+        :key="index"
+        class="BlogList_card text-medium"
+      >
+        <img :src="item.image" />
+        <p class="text-bold">{{ item.author }}</p>
+        <p class="BlogList_card_date text-small">{{ item.publish_date }}</p>
+        <p class="text-large text-bold">{{ item.title }}</p>
+        <div class="BlogList_card_categories">
+          <p
+            v-for="(category, index) in item.categories"
+            :key="index"
+            :style="{
+              color: category.text_color,
+              backgroundColor: category.background_color,
+            }"
+            class="text-small text-bold"
+          >
+            {{ category.title }}
+          </p>
+        </div>
+        <p class="BlogList_card_description">{{ item.description }}</p>
+        <p>სრულად ნახვა</p>
+      </div>
     </div>
+    <login-modal></login-modal>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import BlogImg from "../../assets/images/Blog.png";
+import BlogImg from "@/assets/images/Blog.png";
+import LoginModal from "@/components/LoginModal/LoginModal.vue";
 
 export default {
   name: "BlogList",
@@ -61,6 +65,10 @@ export default {
       categories: [],
       BlogImg: BlogImg,
     };
+  },
+
+  components: {
+    LoginModal: LoginModal,
   },
 
   methods: {
