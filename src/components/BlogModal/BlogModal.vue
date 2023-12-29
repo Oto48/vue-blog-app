@@ -16,7 +16,7 @@ import ApprovedSvg from "@/assets/svg/ApprovedSvg.vue";
 import ExitSVG from "@/assets/svg/ExitSvg";
 
 export default {
-  name: "BlodModal",
+  name: "BlogModal",
 
   props: {
     text: String,
@@ -34,6 +34,7 @@ export default {
     },
 
     redirect() {
+      this.closeModal();
       this.$router.push({ name: "BlogList" });
     },
   },

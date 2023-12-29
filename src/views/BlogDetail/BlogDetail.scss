@@ -1,0 +1,142 @@
+.container {
+  h1 {
+    color: #1a1a1f;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .blog {
+    width: 720px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    img {
+      width: 100%;
+      height: 328px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    &_details {
+      > div {
+        display: flex;
+        align-items: center;
+
+        p {
+          margin: 0;
+          color: #85858d;
+        }
+
+        .bullet {
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background-color: #85858d;
+          margin: 0 12px;
+        }
+      }
+    }
+
+    h3 {
+      color: #1a1a1f;
+      font-size: 16px;
+      font-weight: 500;
+      margin: 8px 0;
+    }
+
+    p {
+      color: #404049;
+      font-size: 16px;
+      line-height: 28px;
+    }
+
+    .categories {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+
+      p {
+        margin: 0;
+        padding: 6px 10px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 16px;
+      }
+    }
+  }
+
+  .list {
+    margin-top: 90px;
+    display: flex;
+    gap: 40px;
+    flex-direction: column;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+
+      div {
+        display: flex;
+        gap: 24px;
+      }
+    }
+
+    .BlogList {
+      display: flex;
+      gap: 32px;
+
+      &_card {
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+
+        a {
+          font-size: 14px;
+          text-decoration: none;
+          color: #5d37f3;
+          font-weight: 500;
+        }
+
+        p {
+          margin: 0;
+        }
+
+        &_date {
+          color: #85858d;
+        }
+
+        &_description {
+          color: #404049;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+
+        img {
+          border-radius: 12px;
+          width: 100%;
+          height: 328px;
+        }
+
+        &_categories {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 16px;
+
+          p {
+            padding: 8px 16px;
+            border-radius: 30px;
+          }
+        }
+      }
+    }
+  }
+}

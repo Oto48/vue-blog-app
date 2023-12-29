@@ -10,8 +10,9 @@
           v-for="(category, index) in categories"
           :key="index"
           :style="{
-            color: category.text_color,
-            backgroundColor: category.background_color,
+            background:
+              'rgba(' + hexToRgb(category.background_color) + ', 0.08)',
+            color: category.background_color,
           }"
           @click="filter(category.id)"
         >
@@ -34,8 +35,9 @@
             v-for="(category, index) in item.categories"
             :key="index"
             :style="{
-              color: category.text_color,
-              backgroundColor: category.background_color,
+              background:
+                'rgba(' + hexToRgb(category.background_color) + ', 0.08)',
+              color: category.background_color,
             }"
             class="text-small text-bold"
           >
@@ -43,7 +45,7 @@
           </p>
         </div>
         <p class="BlogList_card_description">{{ item.description }}</p>
-        <p>სრულად ნახვა</p>
+        <router-link :to="'/' + item.id">სრულად ნახვა</router-link>
       </div>
     </div>
     <login-modal></login-modal>
@@ -77,6 +79,15 @@ export default {
         blog.categories.some((category) => category.id === id)
       );
     },
+
+    hexToRgb(hex) {
+      hex = hex.replace(/^#/, "");
+      const bigint = parseInt(hex, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `${r}, ${g}, ${b}`;
+    },
   },
 
   mounted() {
@@ -85,7 +96,7 @@ export default {
         headers: {
           Accept: "application/json",
           Authorization:
-            "Bearer 4fb36d478dd2c9832443d9cd1fe3f43236ab40fab7f1f7bc63e16635dc065151",
+            "Bearer ba70b939c3f19299963fc2f60faf10d361c50d172bbc4a0457adda9ffcb29986",
         },
       })
       .then((response) => {
@@ -99,7 +110,7 @@ export default {
         headers: {
           Accept: "application/json",
           Authorization:
-            "Bearer 4fb36d478dd2c9832443d9cd1fe3f43236ab40fab7f1f7bc63e16635dc065151",
+            "Bearer ba70b939c3f19299963fc2f60faf10d361c50d172bbc4a0457adda9ffcb29986",
         },
       })
       .then((response) => {

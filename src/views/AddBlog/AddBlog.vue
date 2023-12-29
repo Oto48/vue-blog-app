@@ -268,7 +268,7 @@ export default {
           headers: {
             Accept: "application/json",
             Authorization:
-              "Bearer 4fb36d478dd2c9832443d9cd1fe3f43236ab40fab7f1f7bc63e16635dc065151",
+              "Bearer ba70b939c3f19299963fc2f60faf10d361c50d172bbc4a0457adda9ffcb29986",
           },
         })
         .then((response) => {
@@ -496,7 +496,7 @@ export default {
         headers: {
           Accept: "application/json",
           Authorization:
-            "Bearer 4fb36d478dd2c9832443d9cd1fe3f43236ab40fab7f1f7bc63e16635dc065151",
+            "Bearer ba70b939c3f19299963fc2f60faf10d361c50d172bbc4a0457adda9ffcb29986",
         },
       })
       .then((response) => {
