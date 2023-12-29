@@ -13,8 +13,9 @@
             background:
               'rgba(' + hexToRgb(category.background_color) + ', 0.08)',
             color: category.background_color,
+            border: category.selected ? '1px solid #000' : '',
           }"
-          @click="filter(category.id)"
+          @click="filter(category)"
         >
           {{ category.title }}
         </p>
@@ -49,11 +50,13 @@
       </div>
     </div>
   </div>
+  <login-modal></login-modal>
 </template>
 
 <script>
 import axios from "axios";
 import BlogImg from "@/assets/images/Blog.png";
+import LoginModal from "@/components/LoginModal/LoginModal.vue";
 
 export default {
   name: "BlogList",
@@ -64,14 +67,25 @@ export default {
       filteredBlogs: null,
       categories: [],
       BlogImg: BlogImg,
+      selectedCategoryIds: [],
     };
   },
 
+  components: {
+    LoginModal: LoginModal,
+  },
+
   methods: {
-    filter(id) {
-      this.filteredBlogs = this.blogs.filter((blog) =>
-        blog.categories.some((category) => category.id === id)
-      );
+    filter(category) {
+      if (!category.selected) {
+        category.selected = true;
+        const id = category.id;
+        this.filteredBlogs = this.blogs.filter((blog) =>
+          blog.categories.some((category) => category.id === id)
+        );
+      } else {
+        category.selected = false;
+      }
     },
 
     hexToRgb(hex) {

@@ -13,6 +13,14 @@ const routes = [
     path: "/add",
     name: "AddBlog",
     component: AddBlog,
+    beforeEnter: (to, from, next) => {
+      const hasItem = localStorage.getItem("user");
+      if (!hasItem) {
+        next({ name: "BlogList" });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/:id",

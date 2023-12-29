@@ -65,12 +65,14 @@
       </div>
     </div>
   </div>
+  <login-modal></login-modal>
 </template>
 
 <script>
 import axios from "axios";
 import ArrowRightSvg from "@/assets/svg/ArrowRightSvg";
 import ArrowLeftSvg from "@/assets/svg/ArrowLeftSvg";
+import LoginModal from "@/components/LoginModal/LoginModal.vue";
 
 export default {
   name: "BlogDetail",
@@ -94,8 +96,9 @@ export default {
   },
 
   components: {
-    ArrowRightSvg: ArrowRightSvg,
+    ArrowRightSvg,
     ArrowLeftSvg,
+    LoginModal,
   },
 
   methods: {

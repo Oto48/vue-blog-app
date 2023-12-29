@@ -7,13 +7,11 @@
     </div>
     <button v-if="!$store.state.user" @click="logIn">შესვლა</button>
   </nav>
-  <login-modal></login-modal>
   <router-view />
 </template>
 
 <script>
 import NavImg from "./assets/images/NavImg.png";
-import LoginModal from "@/components/LoginModal/LoginModal.vue";
 
 export default {
   name: "App",
@@ -22,10 +20,6 @@ export default {
     return {
       NavImg: NavImg,
     };
-  },
-
-  components: {
-    LoginModal: LoginModal,
   },
 
   methods: {

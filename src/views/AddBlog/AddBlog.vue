@@ -225,6 +225,7 @@ export default {
         email: "",
       },
 
+      newCategories: [],
       categories: [],
       selectedCategories: [],
       dropdownOpen: false,
@@ -459,6 +460,7 @@ export default {
       this.descriptionError = null;
       this.dateError = null;
       this.emailError = null;
+      this.categories = this.newCategories;
     },
 
     updateModal() {
@@ -502,6 +504,7 @@ export default {
       .then((response) => {
         const items = response.data;
         this.categories = items.data;
+        this.newCategories = items.data;
         console.log(this.categories);
       });
 
