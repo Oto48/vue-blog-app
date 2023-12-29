@@ -12,13 +12,23 @@ nav {
   justify-content: space-between;
   align-items: center;
 
-  button {
-    cursor: pointer;
-    border-radius: 8px;
-    background: #5d37f3;
-    padding: 10px 20px;
-    color: #fff;
-    border: none;
+  div {
+    display: flex;
+    gap: 8px;
+
+    button {
+      cursor: pointer;
+      border-radius: 8px;
+      background: #5d37f3;
+      padding: 10px 20px;
+      color: #fff;
+      border: none;
+    }
+
+    .logOut {
+      background-color: #f2f2fa;
+      color: black;
+    }
   }
 }
 

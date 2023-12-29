@@ -1,10 +1,11 @@
 <template>
   <nav class="p-1">
     <router-link to="/"><img :src="NavImg" alt="" /></router-link>
-    <router-link v-if="$store.state.user" to="/add"
-      ><button>დაამატე ბლოგი</button></router-link
-    >
-    <button v-if="!$store.state.user" @click="login">შესვლა</button>
+    <div v-if="$store.state.user">
+      <router-link to="/add"><button>დაამატე ბლოგი</button></router-link>
+      <button class="logOut" @click="logOut">გამოსვლა</button>
+    </div>
+    <button v-if="!$store.state.user" @click="logIn">შესვლა</button>
   </nav>
   <router-view />
 </template>
@@ -27,7 +28,7 @@ export default {
       this.$store.commit("updateUser", false);
     },
 
-    login() {
+    logIn() {
       this.$store.commit("updateModal", true);
     },
   },
